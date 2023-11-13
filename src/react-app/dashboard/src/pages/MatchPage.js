@@ -1,5 +1,4 @@
 import { React, useEffect, useState } from 'react'
-import './css/TeamPage.css'
 import { useParams } from 'react-router-dom';
 import { MatchDetailCard } from '../components/MatchDetailCard';
 import { MatchSmallCard } from '../components/MatchSmallCard';
