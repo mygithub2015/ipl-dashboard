@@ -1,48 +1,36 @@
 import { React, useEffect, useState } from 'react'
 import './css/TeamPage.css'
+import { useParams } from 'react-router-dom';
 import { MatchDetailCard } from '../components/MatchDetailCard';
 import { MatchSmallCard } from '../components/MatchSmallCard';
 
 export const TeamPage = () => {
 
-  const [team, setTeam] = useState({matches: {}});
+  const [team, setTeam] = useState({ matches: [] });
   // const [loading, setLoading] = useState(false);
+  const { teamName } = useParams()
 
   useEffect(
     () => {
       const fetchMatches = async () => {
-        const response = await fetch('http://localhost:8090/teams/Delhi%20Capitals');
+        const response = await fetch(`http://localhost:8090/teams/${teamName}`);
         const data = await response.json();
         setTeam(data);
-        console.log(team);
+        console.log("matches", team.matches);
       };
       fetchMatches();
-    }, []
+    }, [teamName]
 
   );
-  // setLoading(true); 
-  
-  //       axios.get( 
-  //           'http://localhost:8090/teams/Delhi%20Capitals') 
-  //           .then((response) => { 
-  //               setTeam(response.data); 
-  //               setLoading(false); 
-  //           }) 
-  //           .catch((error) => { 
-  //               console.log(error); 
-  //               setLoading(false); 
-  //           }); 
-  //   }, []); // This is the dependency array 
-  
-  //   if (loading) { 
-  //       return <p>Loading data...</p>; 
-  //   }
 
+  if (!team || !team.teamName) {
+    return <h1> Team not found! </h1>
+  }
   return (
     <div className="team-page">
       <h2>{team.teamName}</h2>
-      <MatchDetailCard match = {team.matches[0]}/>
-      {team.matches.slice(1).map(match => <MatchSmallCard match = {match} />)}
+      <MatchDetailCard teamName = {team.teamName} match={team.matches[0]} />
+      {team.matches.slice(1).map(match => <MatchSmallCard teamName = {team.teamName} match={match} />)}
     </div>
   );
 };
